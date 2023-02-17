@@ -1,10 +1,16 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web_socket_channel/status.dart' as status;
 
 const appName = 'Socket测试助手';
 void main(List<String> args) {
   runApp(const App());
 }
+
+String protocol = 'tcp';
+String address = '';
+var appContext;
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -100,7 +106,9 @@ class Index extends StatelessWidget {
                       child: Text('Websocket'),
                     ),
                   ],
-                  onChanged: (value) {},
+                  onChanged: (value) {
+                    protocol = value!;
+                  },
                 ),
                 TextField(
                   decoration: const InputDecoration(
@@ -113,7 +121,9 @@ class Index extends StatelessWidget {
                     labelStyle: TextStyle(color: Colors.white60),
                   ),
                   style: const TextStyle(color: Colors.white),
-                  onChanged: (value) {},
+                  onChanged: (value) {
+                    address = value;
+                  },
                 ),
                 const SizedBox(
                   height: 20,
@@ -134,7 +144,6 @@ class Index extends StatelessWidget {
                     maximumSize:
                         MaterialStateProperty.all(const Size(375.0, 36.0)),
                   ),
-                  onPressed: () {},
                   child: const Text(
                     '连接',
                     style: TextStyle(
@@ -143,8 +152,26 @@ class Index extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  onPressed: () {
+                    connect();
+                  },
                 ),
               ]),
         ));
+  }
+}
+
+void connect() {
+  try {
+    final wsUrl = Uri.parse(address);
+    var channel = WebSocketChannel.connect(wsUrl);
+    channel.stream.listen((message) {
+      print("success");
+      channel.sink.add('received!');
+      channel.sink.close(status.goingAway);
+    });
+  } catch (e) {
+    print(e);
+    print("fail");
   }
 }
