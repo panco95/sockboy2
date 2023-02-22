@@ -1,16 +1,15 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:web_socket_channel/status.dart' as status;
+import 'package:flutter_application_1/button/connect.dart';
+import 'package:flutter_application_1/protocol/websocket.dart';
 
 const appName = 'Socket测试助手';
 void main(List<String> args) {
   runApp(const App());
 }
 
-String protocol = 'tcp';
-String address = '';
-var appContext;
+String protocol = 'websocket';
+Websocket ws = Websocket();
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -91,16 +90,6 @@ class Index extends StatelessWidget {
                   iconEnabledColor: Colors.white,
                   items: const [
                     DropdownMenuItem(
-                      value: 'tcp',
-                      enabled: true,
-                      child: Text('TCP'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'udp',
-                      enabled: true,
-                      child: Text('UDP'),
-                    ),
-                    DropdownMenuItem(
                       value: 'ws',
                       enabled: true,
                       child: Text('Websocket'),
@@ -122,56 +111,14 @@ class Index extends StatelessWidget {
                   ),
                   style: const TextStyle(color: Colors.white),
                   onChanged: (value) {
-                    address = value;
+                    ws.setAddress(value);
                   },
                 ),
                 const SizedBox(
                   height: 20,
                 ),
-                TextButton(
-                  style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all(const Color(0xFFE8E8E8)),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                    ),
-                    padding: MaterialStateProperty.all(
-                        const EdgeInsets.symmetric(
-                            horizontal: 40.0, vertical: 14.0)),
-                    minimumSize: MaterialStateProperty.all(const Size(0, 0)),
-                    maximumSize:
-                        MaterialStateProperty.all(const Size(375.0, 36.0)),
-                  ),
-                  child: const Text(
-                    '连接',
-                    style: TextStyle(
-                      fontSize: 17,
-                      color: Color(0xFF646464),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  onPressed: () {
-                    connect();
-                  },
-                ),
+                ButtonConnect(ws),
               ]),
         ));
-  }
-}
-
-void connect() {
-  try {
-    final wsUrl = Uri.parse(address);
-    var channel = WebSocketChannel.connect(wsUrl);
-    channel.stream.listen((message) {
-      print("success");
-      channel.sink.add('received!');
-      channel.sink.close(status.goingAway);
-    });
-  } catch (e) {
-    print(e);
-    print("fail");
   }
 }
