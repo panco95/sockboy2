@@ -111,6 +111,7 @@ class Index extends StatelessWidget {
                   ),
                   style: const TextStyle(color: Colors.white),
                   onChanged: (value) {
+                    ws.setCallback(onMessage, onClose, onError);
                     ws.setAddress(value);
                   },
                 ),
@@ -121,4 +122,16 @@ class Index extends StatelessWidget {
               ]),
         ));
   }
+}
+
+void onMessage(dynamic message) {
+  print(message);
+}
+
+void onClose() {
+  print('close');
+}
+
+void onError(e) {
+  print(e);
 }
