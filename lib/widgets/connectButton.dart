@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/protocol/websocket.dart';
 
 // ignore: must_be_immutable
-class ButtonConnect extends StatefulWidget {
+class ConnectButton extends StatefulWidget {
   Websocket _ws = Websocket();
-  ButtonConnect(Websocket ws, {super.key}) {
+  ConnectButton(Websocket ws, {super.key}) {
     _ws = ws;
   }
 
   @override
   // ignore: no_logic_in_create_state
-  State<ButtonConnect> createState() => _ButtonConnectState(_ws);
+  State<ConnectButton> createState() => _ConnectButtonState(_ws);
 }
 
-class _ButtonConnectState extends State<ButtonConnect> {
+class _ConnectButtonState extends State<ConnectButton> {
   Websocket _wsConn = Websocket();
   String text = '连接';
 
-  _ButtonConnectState(Websocket ws) {
+  _ConnectButtonState(Websocket ws) {
     _wsConn = ws;
   }
 

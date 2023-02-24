@@ -1,7 +1,8 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/button/connect.dart';
+import 'package:flutter_application_1/widgets/connectButton.dart';
 import 'package:flutter_application_1/protocol/websocket.dart';
+import 'package:flutter_application_1/widgets/messageBox.dart';
 
 const appName = 'Socket测试助手';
 void main(List<String> args) {
@@ -10,6 +11,7 @@ void main(List<String> args) {
 
 String protocol = 'websocket';
 Websocket ws = Websocket();
+MessageBox receiveBox = MessageBox();
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -118,13 +120,18 @@ class Index extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                ButtonConnect(ws),
+                ConnectButton(ws),
+                const SizedBox(
+                  height: 20,
+                ),
+                receiveBox,
               ]),
         ));
   }
 }
 
 void onMessage(dynamic message) {
+  receiveBox.addMessage(message);
   print(message);
 }
 
