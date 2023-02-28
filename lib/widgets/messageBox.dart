@@ -29,19 +29,16 @@ class _MessageBoxState extends State<MessageBox> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-            padding: const EdgeInsets.all(0),
-            child: Text(
-              _message,
-              style: const TextStyle(
-                color: Colors.white,
-                backgroundColor: Colors.black,
-              ),
-            )),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(0),
+      child: Text(
+        _message,
+        softWrap: true,
+        style: const TextStyle(
+          color: Colors.white,
+          backgroundColor: Colors.black,
+        ),
+      ),
     );
   }
 }
